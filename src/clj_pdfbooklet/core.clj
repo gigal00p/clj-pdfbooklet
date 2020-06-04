@@ -34,7 +34,6 @@
        (map #(.getAbsolutePath %))
        (filter #(str/ends-with? % ".pdf"))))
 
-
 (defn make-page-range
   "Make vector of ints from n to m inclusive.
    n,m needs to be positive intiger.
@@ -53,10 +52,10 @@
           doc (PDDocument/load pdf-file)
           no-of-pages (.getNumberOfPages doc)]
       (.close doc)
-        no-of-pages)
-       (catch Exception e
-         (timbre/errorf "Something went wrong while parsing `%s` message: %s" pdf-file-or-path (.getMessage ^Exception e))
-         nil)))
+      no-of-pages)
+    (catch Exception e
+      (timbre/errorf "Something went wrong while parsing `%s` message: %s" pdf-file-or-path (.getMessage ^Exception e))
+      nil)))
 
 (defn no-of-pages-to-add
   "Calculates how many pages need to be added till the end of PDF
@@ -71,7 +70,7 @@
   [list]
   [(first list)(last list)])
 
-(def pdf-input "c:/Users/walki/Downloads/pdf_test/input.pdf")
+(def pdf-input "c:/Users/walki/Downloads/some_pdf.pdf")
 (def pdf-output "c:/Users/walki/Downloads/pdf_test/wynik_1.pdf")
 
 (defn print-object-methods
@@ -82,21 +81,23 @@
        (print-table)))
 
 (defn split-pdf-page
+  "Given pdf-file-or-path extracts pages from start to end and writes to
+  file-output-name. Returns true on success."
   [pdf-file-or-path start end file-output-name]
   (try
     (let [^File       pdf-file (io/as-file pdf-file-or-path)
           ^PDDocument doc (PDDocument/load pdf-file)
-          ^Splitter   splitter (Splitter.)]
-      (.setStartPage splitter start)
-      (.setEndPage splitter end)
-      (.setSplitAtPage splitter end)
-      (-> (.split splitter doc) 
-          first
-          (.save (io/as-file file-output-name)))
-      (.close doc))
+          ^Splitter   splitter (Splitter.)
+          splitter-start (.setStartPage splitter start)
+          splitter-end   (.setEndPage splitter end)
+          splitter-at    (.setSplitAtPage splitter end)
+          pd-doc         (-> (.split splitter doc) first)
+          doc-save       (.save pd-doc (io/as-file file-output-name))
+          doc-close-res  (.close pd-doc)
+          doc-close-src  (.close doc)])
+    true ; rerurn true on success
     (catch Exception e
       (timbre/errorf "Something went wrong while splitting `%s` message: %s" pdf-file-or-path (.getMessage ^Exception e)))))
-      
 
 (defn make-booklet-ranges
   [booklet-no-of-pages total-no-of-pages]
@@ -118,7 +119,6 @@
    ["-o" "--output-dir DIR" "Directory where splitted documents will be written"]
    ["-s" "--size CHUNK" "Size of the chunk" :parse-fn #(Integer/parseInt %) :default 16]
    ["-h" "--help"]])
-
 
 (defn help [options]
   (->> ["clj-pdfbooklet is a command line tool for splitting pdf documents into smaller pdf docs."
@@ -143,9 +143,12 @@
       (try
         (let [input-doc (->> options :input-pdf)
               output-dir (->> options :output-dir)
-              chunk-size (->> options :size)]
-          (split-whole-book input-doc output-dir chunk-size)
-          ;(shutdown-agents)
+              chunk-size (->> options :size)
+              no-of-success-files (-> (split-whole-book input-doc output-dir chunk-size)
+                                      frequencies
+                                      (get true))]
+          (println (str "Successfully produced " no-of-success-files " files."))
+          (shutdown-agents)
           ) ; shutdown agents thread pool so that program exits quickly
         (catch Exception e
           (timbre/errorf "Something went wrong: %s" (.getMessage ^Exception e)))))))
