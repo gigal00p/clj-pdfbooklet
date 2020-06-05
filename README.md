@@ -1,36 +1,33 @@
 # clj-pdfbooklet
 
-FIXME: description
+WIP. Small app for preparing ready to print pdf in booklet format.
 
 ## Installation
 
-Download from http://example.com/FIXME.
+Download from https://github.com/gigal00p/clj-pdfbooklet
 
 ## Usage
 
-FIXME: explanation
+Simply invoke from CLI:
 
     $ java -jar clj-pdfbooklet-0.1.0-standalone.jar [args]
 
 ## Options
 
-FIXME: listing of options this app accepts.
+`-i` - input pdf document
+`-o` - output directory where booklet will be written
 
 ## Examples
 
-...
+java -jar C:\Users\walki\code\clojure\clj-pdfbooklet\target\uberjar\clj-pdfbooklet-0.1.0-SNAPSHOT-standalone.jar -i "C:\Users\walki\Sync\SHARED\books\new_books\Network\TCP-IP-Illustrated.pdf" -o C:\Users\walki\Downloads -s 315
 
 ### Bugs
 
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
+Please report bugs via Github.
 
 ## License
 
-Copyright © 2020 FIXME
+Copyright © 2020 Krzysztof Walkiewicz
 
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License 2.0 which is available at
