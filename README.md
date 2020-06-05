@@ -14,12 +14,13 @@ Simply invoke from CLI:
 
 ## Options
 
-`-i` - input pdf document
-`-o` - output directory where booklet will be written
+* `-i` - input pdf document
+* `-o` - output directory where booklet will be written
+* `-s` - number of pages of target booklet chunk
 
 ## Examples
 
-java -jar C:\Users\walki\code\clojure\clj-pdfbooklet\target\uberjar\clj-pdfbooklet-0.1.0-SNAPSHOT-standalone.jar -i "C:\Users\walki\Sync\SHARED\books\new_books\Network\TCP-IP-Illustrated.pdf" -o C:\Users\walki\Downloads -s 315
+`java -jar clj-pdfbooklet-0.1.0-SNAPSHOT-standalone.jar -i C:\book.pdf -o C:\Users\name\Downloads -s 315`
 
 ### Bugs
 
