@@ -4,17 +4,10 @@
             [clojure.tools.cli :refer [parse-opts]]
             [taoensso.timbre :as timbre :refer [errorf]]
             [clj-pdfbooklet.common :as common]
-            [clj-pdfbooklet.interop :as interop]))
+            [clj-pdfbooklet.transform :as transform]))
 
 ;(def pdf-input "c:/Users/walki/Downloads/some_pdf.pdf")
 ;(def pdf-output "c:/Users/walki/Downloads/pdf_test/wynik_1.pdf")
-
-(defn split-whole-book
-  "Split pdf on multiple smaller files"
-  [fname-in fname-out booklet-length]
-  (let [ranges (common/make-booklet-ranges booklet-length (interop/get-number-of-pages fname-in))
-        f-names (for [x (range 100 (+ 100 (count ranges)))] (str fname-out "/" x ".pdf"))]
-    (doall (pmap #(interop/split-pdf-page fname-in (first %1) (last %1) %2) ranges f-names))))
 
 (def cli-options
   [["-i" "--input-pdf PDF" "PDF document you want to split"]
@@ -23,7 +16,7 @@
    ["-h" "--help"]])
 
 (defn help [options]
-  (->> ["clj-pdfbooklet is a command line tool for splitting pdf documents into smaller pdf docs."
+  (->> ["clj-pdfbooklet is a command line tool for making pdfbooklets ready to print."
         ""
         "Usage: java -jar clj-pdfbooklet-0.1.0-SNAPSHOT-standalone.jar [options]"
         ""
@@ -47,7 +40,7 @@
         (let [input-doc (->> options :input-pdf)
               output-dir (->> options :output-dir)
               chunk-size (->> options :size)
-              no-of-success-files (-> (split-whole-book input-doc output-dir chunk-size)
+              no-of-success-files (-> (transform/split-whole-book input-doc output-dir chunk-size)
                                       frequencies
                                       (get true))]
           (println (str "Successfully produced " no-of-success-files " files."))
