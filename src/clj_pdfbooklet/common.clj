@@ -5,6 +5,10 @@
             [taoensso.timbre :as timbre :refer [error]])
   (:use [clojure.pprint :only [print-table]]))
 
+(defn first-last
+  [list]
+  [(first list) (last list)])
+
 (defn get-full-path-files-in-dir
   "Returns absolute path of files in the passed directory.
    :recursively? keyword controls whether walk will be done recursively"
@@ -50,10 +54,6 @@
 (defn exit [status msg]
   (println msg)
   (System/exit status))
-
-(defn first-last
-  [list]
-  [(first list) (last list)])
 
 (defn no-of-pages-to-add
   "Calculates how many pages need to be added till the end of PDF
