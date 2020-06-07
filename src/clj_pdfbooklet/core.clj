@@ -6,9 +6,6 @@
             [clj-pdfbooklet.common :as common]
             [clj-pdfbooklet.transform :as transform]))
 
-;(def pdf-input "c:/Users/walki/Downloads/some_pdf.pdf")
-;(def pdf-output "c:/Users/walki/Downloads/pdf_test/wynik_1.pdf")
-
 (def cli-options
   [["-i" "--input-pdf PDF" "PDF document you want to split"]
    ["-o" "--output-dir DIR" "Directory where splitted documents will be written"]
@@ -24,9 +21,6 @@
         options
         ""]
        (str/join \newline)))
-
-; (make-booklet-ranges 16 (get-number-of-pages pdf-input))
-; (-main "--input-pdf" "c:/Users/walki/Sync/SHARED/books/Site Reliability Engineering.pdf" "--output-dir" "c:/Users/walki/Downloads" "--size" "256")
 
 (defn -main
   [& args]
@@ -44,7 +38,8 @@
                                       frequencies
                                       (get true))]
           (println (str "Successfully produced " no-of-success-files " files."))
-          ;; (shutdown-agents)
-          ) ; shutdown agents thread pool so that program exits quickly
+          ; (shutdown-agents) ;shutdown agents thread pool so that program exits quickly
+          )
         (catch Exception e
           (timbre/errorf "Something went wrong: %s" (.getMessage ^Exception e)))))))
+
