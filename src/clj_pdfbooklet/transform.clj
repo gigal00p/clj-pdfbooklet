@@ -45,3 +45,16 @@
                                (->> (get-desired-page-order booklet-size (interop/get-number-of-pages pdf-file-in))
                                     (map #(dec %)))
                                pdf-file-out))
+
+
+(defn make-book
+  [pdf-in dir-out booklet-length]
+  (let [pdf-in pdf-in
+        dir-out dir-out
+        total-no-of-pages (interop/get-number-of-pages pdf-in)
+        booklets (->> (get-desired-page-order booklet-length total-no-of-pages)
+                      (map #(dec %))
+                      (partition-all 2))
+        f-names (for [x (range 100 (+ 100 (count booklets)))] (str dir-out "/" x ".pdf"))]
+    (->> (pmap #(interop/arrange-pages-side-by-side pdf-in (first %1) (second %1) %2) booklets f-names)
+         frequencies)))
