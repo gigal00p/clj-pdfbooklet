@@ -140,5 +140,5 @@
       (.close src-doc)
       true)
     (catch Exception e
-      (timbre/errorf "Something went wrong while merging pages side by side in the file `%s` message: %s"
-                     pdf-file-in (.getMessage ^Exception e)))))
+      (timbre/errorf "Something went wrong while merging `%s` pages side by side in the file `%s` message: %s"
+                     (str page-1-index " " page-2-index) pdf-file-in (.getMessage ^Exception e)))))
