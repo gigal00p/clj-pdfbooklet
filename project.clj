@@ -6,7 +6,7 @@
   :dependencies [[org.clojure/clojure "1.10.1"]
                  [org.clojure/tools.cli "1.0.194"]
                  [com.taoensso/timbre "4.10.0"]
-                 [org.apache.pdfbox/pdfbox "2.0.19"]]
+                 [org.apache.pdfbox/pdfbox "2.0.20"]]
   :plugins [[lein-cljfmt "0.6.7"]]
   :main ^:skip-aot clj-pdfbooklet.core
   :target-path "target/%s"
