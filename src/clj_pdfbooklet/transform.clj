@@ -7,7 +7,7 @@
   [fname-in fname-out booklet-length]
   (let [ranges (common/make-booklet-ranges booklet-length (interop/get-number-of-pages fname-in))
         f-names (for [x (range 100 (+ 100 (count ranges)))] (str fname-out "/" x ".pdf"))]
-    (doall (pmap #(interop/split-pdf-page fname-in (first %1) (last %1) %2) ranges f-names))))
+    (doall (map #(interop/split-pdf-page fname-in (first %1) (last %1) %2) ranges f-names))))
 
 (defn booklet-page-order
   "Returns actual bookled pages order."
